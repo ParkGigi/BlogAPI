@@ -1,1 +1,1 @@
-import api.views.post
+import api.views.posts
