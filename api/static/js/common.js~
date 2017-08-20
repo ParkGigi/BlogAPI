@@ -1,0 +1,19 @@
+function requestBuilder(method) {
+  return function (url, body, callback) {
+    var xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function() {
+      if(this.readyState == 4 && this.status == 200) {
+        callback(JSON.parse(this.responseText));
+      }
+    };
+
+    xmlhttp.open(method, url, true);
+    xmlhttp.send();
+  }
+}
+
+window.request = {
+  get: requestBuilder("GET"),
+  post: requestBuilder("POST"),
+};

@@ -3,7 +3,7 @@ from api import db
 def get():
     posts = []
     with db.cursor() as cursor:
-        cursor.execute("SELECT * FROM Post;")
+        cursor.execute("SELECT * FROM Posts;")
     for post_id, author_id, title, content, created, updated in cursor.fetchall():
         posts.append({
             "id": post_id,

@@ -1,0 +1,21 @@
+from api import db
+
+def get(username, password):
+    user_information = {}
+    with db.cursor() as cursor:
+        cursor.execute("SELECT * FROM Users WHERE username=%s AND password=%s;", (username, password))
+        result = cursor.fetchone()
+        user_information = {
+            "id": result[0],
+            "username": result[1],
+            "password": result[2],
+            "nickname": result[3],
+            "picture": result[4],
+            "user_level": result[5],
+            "delete": result[6],
+            "created": result[7],
+            "updated": result[8]
+        }
+        cursor.close()
+        
+    return user_information
