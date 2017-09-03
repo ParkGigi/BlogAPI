@@ -2,10 +2,31 @@ import bcrypt
 
 from api import db
 
-def get(username):
+def get():
+    users = []
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM Users;")
+    for user_id, username, password, nickname, picture, user_level, delete, created, updated  in cursor.fetchall():
+        users.append(
+            {
+                "id": user_id,
+                "username": username,
+                "password": password,
+                "picture": picture,
+                "user_level": user_level,
+                "delete": delete,
+                "created": created,
+                "updated": updated,
+            }
+        )
+        cursor.close()
+    return users
+
+
+def get_one_user(username):
     user_information = {}
-    curosr = db.cursor()
-    cursor.execute("SELECT * FROM Users WHERE username=%s", (username, password))
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM Users WHERE username=%s;", (username, password))
     result = cursor.fetchone()
     user_information = {
         "id": result[0],

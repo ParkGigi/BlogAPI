@@ -2,14 +2,16 @@ from api import db
 
 def get():
     posts = []
-    with db.cursor() as cursor:
-        cursor.execute("SELECT * FROM Posts;")
-    for post_id, author_id, title, content, created, updated in cursor.fetchall():
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM Posts;")
+    #print(cursor.fetchall())
+    for post_id, author_id, title, content, deleted, created, updated in cursor.fetchall():
         posts.append({
             "id": post_id,
             "author_id": author_id,
             "title": title,
             "content": content,
+            "deleted": deleted,
             "created": created,
             "updated": updated,
         })
@@ -18,16 +20,16 @@ def get():
 
 def get_one_post(post_id):
     cursor = db.cursor()
-    cursor.execute("SELECT * FROM Post WHERE id=%s", (post_id,))
+    cursor.execute("SELECT * FROM Posts WHERE id=%s", (post_id,))
     result = cursor.fetchone()
     return result
 
 def create(post_dictionary):
     post = {}
     with db.cursor() as cursor:
-        cursor.execute("INSERT INTO Post (author_id, title, content) Values(%s, %s, %s)",(1, post_dictionary['title'], post_dictionary['content']))
+        cursor.execute("INSERT INTO Posts (author_id, title, content) Values(%s, %s, %s)",(1, post_dictionary['title'], post_dictionary['content']))
         last_id = cursor.lastrowid
-        cursor.execute("SELECT * FROM Post WHERE id=%s", (last_id,))
+        cursor.execute("SELECT * FROM Posts WHERE id=%s", (last_id,))
         post_info = cursor.fetchone()
         post = {
             "id": post_info[0],
@@ -43,19 +45,19 @@ def create(post_dictionary):
 def update(post_id, title, content):
     response_message=""
     with db.cursor() as cursor:
-        cursor.execute("SELECT * FROM Post WHERE id=%s;",(post_id,))
+        cursor.execute("SELECT * FROM Posts WHERE id=%s;",(post_id,))
         if cursor.fetchone():
-            cursor.execute("UPDATE Post SET title=%s, content=%s WHERE id=%s;",(title, content,))
-            response_message="Post id %s is updated" % post_id
+            cursor.execute("UPDATE Posts SET title=%s, content=%s WHERE id=%s;",(title, content,))
+            response_message="Posts id %s is updated" % post_id
         else:
-            response_message="Post id %s does not exist" % post_id
+            response_message="Posts id %s does not exist" % post_id
     cursor.close()
     return response_message
 
 def delete(post_id):
     response_message=""
     cursor = db.cursor()
-    cursor.execute("DELETE FROM Post WHERE id=%s", (post_id,))
+    cursor.execute("DELETE FROM Posts WHERE id=%s", (post_id,))
     cursor.close()    
     return response_message
 

@@ -1,6 +1,5 @@
-function requestBuilder(method) {
-  return function (url, body, callback) {
-    var request = new XMLHttpRequest();
+function requestBuilder(method, url, body, callback) {
+    const request = new XMLHttpRequest();
     request.open(method, url, true);
     request.setRequestHeader('Content-Type', 'application/json');
 
@@ -12,10 +11,9 @@ function requestBuilder(method) {
     };
 
     request.send(body ? JSON.stringify(body) : undefined);
-  }
 }
-
-window.request = {
-  get: requestBuilder("GET"),
-  post: requestBuilder("POST"),
-};
+ 
+//window.request = {
+  //get: requestBuilder("GET"),
+  //post: requestBuilder("POST"),
+//};
