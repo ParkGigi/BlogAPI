@@ -2361,9 +2361,15 @@ function request(method, url, body, callback) {
     if (request.readyState === XMLHttpRequest.DONE && callback) {
       callback(response ? JSON.parse(response) : undefined);
     }
+    return response;
   };
 
   request.send(body ? JSON.stringify(body) : undefined);
+}
+
+function getOnePost(post_id, callback) {
+  console.log('I am here 1!');
+  request('GET', 'http://localhost:5000/posts/' + post_id, null, callback);
 }
 
 var Table = function (_React$Component) {
@@ -2483,10 +2489,7 @@ var Posts = function (_React$Component4) {
       var _props = this.props,
           posts = _props.posts,
           getOnePost = _props.getOnePost;
-      //console.log('This is get one post: ',getOnePost);
 
-      getOnePost(1);
-      //getOnePost(posts[i].id);
       var table_rows = [];
 
       for (var i = 0; i < (posts || []).length; i++) {
@@ -2501,8 +2504,12 @@ var Posts = function (_React$Component4) {
           ),
           _react2.default.createElement(
             TableCell,
-            { onClick: getOnePost(posts[i].id), size: 5 },
-            posts[i].title
+            { size: 5 },
+            _react2.default.createElement(
+              _reactRouterDom.Link,
+              { to: '/admin/post/' + posts[i].id + '/edit' },
+              posts[i].title
+            )
           ),
           _react2.default.createElement(
             TableCell,
@@ -2612,8 +2619,6 @@ var Admin = function (_React$Component6) {
     _this6.state = {
       posts: null
     };
-
-    _this6.getOnePost = _this6.getOnePost.bind(_this6);
     return _this6;
   }
 
@@ -2630,18 +2635,7 @@ var Admin = function (_React$Component6) {
 
       request('GET', 'http://localhost:5000/posts', null, function (response) {
         _this7.setState({ posts: response });
-        console.log('These are posts!!: ', response);
       });
-    }
-  }, {
-    key: 'getOnePost',
-    value: function getOnePost(post_id) {
-      return function () {
-        console.log('Get one post1!!!!!');
-        request('GET', 'http://localhost:5000/posts/{post_id}', null, function (response) {
-          console.log('Get one post2: ', response);
-        });
-      };
     }
   }, {
     key: 'getUsers',
@@ -2791,11 +2785,10 @@ var AddPost = function (_React$Component7) {
                   null,
                   'Content'
                 ),
-                _react2.default.createElement('input', {
+                _react2.default.createElement('textarea', {
                   name: 'content',
                   value: content,
-                  onChange: this.onChange
-                })
+                  onChange: this.onChange })
               ),
               _react2.default.createElement(
                 'button',
@@ -2810,6 +2803,68 @@ var AddPost = function (_React$Component7) {
   }]);
 
   return AddPost;
+}(_react2.default.Component);
+
+var EditPost = function (_React$Component8) {
+  _inherits(EditPost, _React$Component8);
+
+  function EditPost() {
+    _classCallCheck(this, EditPost);
+
+    var _this11 = _possibleConstructorReturn(this, (EditPost.__proto__ || Object.getPrototypeOf(EditPost)).call(this));
+
+    _this11.state = {
+      post: {}
+    };
+    _this11.getPost = _this11.getPost.bind(_this11);
+    return _this11;
+  }
+
+  _createClass(EditPost, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      this.getPost(this.props.match.params.postId);
+    }
+  }, {
+    key: 'getPost',
+    value: function getPost(id) {
+      var _this12 = this;
+
+      getOnePost(id, function (response) {
+        _this12.setState({
+          post: response
+        });
+        console.log('finished the request!: ', _this12.state);
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var post = this.state.post;
+
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'div',
+          null,
+          post.title || null
+        ),
+        _react2.default.createElement(
+          'div',
+          null,
+          post.content || null
+        ),
+        _react2.default.createElement(
+          'div',
+          null,
+          post.updated || null
+        )
+      );
+    }
+  }]);
+
+  return EditPost;
 }(_react2.default.Component);
 
 function App() {
@@ -2855,7 +2910,8 @@ function App() {
         _reactRouterDom.Switch,
         null,
         _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/admin', component: Admin }),
-        _react2.default.createElement(_reactRouterDom.Route, { path: '/admin/addPost', component: AddPost })
+        _react2.default.createElement(_reactRouterDom.Route, { path: '/admin/addPost', component: AddPost }),
+        _react2.default.createElement(_reactRouterDom.Route, { path: '/admin/post/:postId/edit', component: EditPost })
       )
     )
   );

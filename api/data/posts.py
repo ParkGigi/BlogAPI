@@ -19,26 +19,41 @@ def get():
     return posts
 
 def get_one_post(post_id):
+    print('This is post_id: ', post_id)
     cursor = db.cursor()
-    cursor.execute("SELECT * FROM Posts WHERE id=%s", (post_id,))
-    result = cursor.fetchone()
-    return result
+    cursor.execute("SELECT * FROM Posts WHERE id=%s;", (post_id,))
+    post_id, author_id, title, content, deleted, created, updated = cursor.fetchone()
+    cursor.close()
+    return {
+        "id": post_id,
+        "author_id": author_id,
+        "title": title,
+        "content": content,
+        "deleted": deleted,
+        "created": created,
+        "updated": updated,
+    }
 
 def create(post_dictionary):
     post = {}
-    with db.cursor() as cursor:
-        cursor.execute("INSERT INTO Posts (author_id, title, content) Values(%s, %s, %s)",(1, post_dictionary['title'], post_dictionary['content']))
-        last_id = cursor.lastrowid
-        cursor.execute("SELECT * FROM Posts WHERE id=%s", (last_id,))
-        post_info = cursor.fetchone()
-        post = {
-            "id": post_info[0],
-            "author_id": post_info[1],
-            "title": post_info[2],
-            "content": post_info[3],
-            "created": post_info[4],
-            "updated": post_info[5]
-        }
+    cursor = db.cursor()
+
+    if not post_dictionary['title'] or not post_dictionary['content']:
+        return
+    
+    cursor.execute("INSERT INTO Posts (author_id, title, content) Values(%s, %s, %s)",(1, post_dictionary['title'], post_dictionary['content']))
+    db.commit()
+    last_id = cursor.lastrowid
+    cursor.execute("SELECT * FROM Posts WHERE id=%s", (last_id,))
+    post_info = cursor.fetchone()
+    post = {
+        "id": post_info[0],
+        "author_id": post_info[1],
+        "title": post_info[2],
+        "content": post_info[3],
+        "created": post_info[4],
+        "updated": post_info[5]
+    }
     cursor.close()
     return post
 

@@ -5,8 +5,9 @@ from api.data import sessions
 from api.views import utility
 
 
-@api.route('/admin')
-def show_admin():
+@api.route('/admin/')
+@api.route('/admin/<path:rest>')
+def show_admin(rest=None):
     session, redirect = utility.require_session()
     return render_template('admin.html')
 

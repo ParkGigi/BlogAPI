@@ -2,23 +2,27 @@ from flask import request, redirect
 
 from api import api
 from api.data import users, posts, comments
-from api.views.utility import jsonify
+from api.views.utility import jsonify, require_session
 
 
 @api.route('/posts', methods=['GET'])
 def posts_handler():
     return jsonify(posts.get())
 
-
 @api.route('/posts', methods=['POST'])
 def posts_create_handler():
-    session, redirect = utility.require_session()
+    session, redirect = require_session()
     
     data = request.json
     
     post = posts.create(data)
     return jsonify(post)
 
+
+@api.route('/posts/<post_id>', methods=['GET'])
+def posts_get_one(post_id):
+    print('post_id in views!!!',post_id)
+    return jsonify(posts.get_one_post(post_id))
 
 @api.route('/posts/<post_id>', methods=['PUT'])
 def posts_update_handler(post_id):
