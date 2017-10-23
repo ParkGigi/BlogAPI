@@ -22,6 +22,7 @@ class APIBaseCase(unittest.TestCase):
         # implement deleting the test user above ^^ so that all other
         # files start from a clean state. Alternatively, you could
         # do something like delete all things from all tables here. Truncate?
+        pass
 
     def test_posts_GET(self):
         response = self.app.get('/posts')
