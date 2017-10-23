@@ -21,8 +21,8 @@ def display_example():
 
 @api.route('/admin/login', methods=['POST'])
 def receive_credentials():
-    username = request.json.get('username')
-    password = request.json.get('password')
+    username = request.get_json().get('username')
+    password = request.get_json().get('password')
 
     errors = []
 

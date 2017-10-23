@@ -43,7 +43,7 @@ label {
     width: 100%;
 }
 
-form.add-post input{
+form.add-post input, form.content input{
     width: 100%;
 }
 

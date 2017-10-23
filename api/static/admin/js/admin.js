@@ -23,7 +23,6 @@ function request(method, url, body, callback) {
 }
 
 function getOnePost(post_id, callback) {
-  console.log('I am here 1!');
   request('GET', `http://localhost:5000/posts/${post_id}`, null,
                   callback);
 }
@@ -62,8 +61,7 @@ class TableRow extends React.Component {
         </div>
       </div>
     );
-  }
-}
+  }}
 
 class TableCell extends React.Component {
   render() {
@@ -260,6 +258,8 @@ class EditPost extends React.Component {
       post: {},
     }
     this.getPost = this.getPost.bind(this);
+    this.onInputChange = this.onInputChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentWillMount() {
@@ -269,19 +269,58 @@ class EditPost extends React.Component {
   getPost(id) {
     getOnePost(id, (response)=>{
       this.setState({
-        post: response
+        post: response,
+        input_title: response.title,
+        input_content: response.content,
+        input_updated: response.updated,
+                               
       });
-      console.log('finished the request!: ',this.state);
     })
+  }
+
+  onInputChange(input_field_name) {
+    return(e) => {
+      console.log('e.target.value: ', e.target.value);
+      this.setState({
+        [input_field_name]: e.target.value, 
+      })
+    }
+  }
+
+  onSubmit(post_id) {
+    return() => {
+    console.log('On submit clicked!');
+    request('PUT', `/posts/${post_id}`,
+            {
+              'title': this.state.input_title,
+              'content': this.state.input_content,
+            }
+    ), () => {
+      this.props.history.push('/admin');
+      
+    }
+      }
   }
   
   render() {
-    const { post } = this.state;
+    const { post, input_title, input_content, input_updated } = this.state;
     return(
-      <div>
-        <div>{post.title || null}</div>
-        <div>{post.content || null}</div>
-        <div>{post.updated || null}</div>
+      <div className="container">
+        <div className="row">
+          <div className="col-lg-12">
+            <form onSubmit={this.onSubmit(this.props.match.params.postId)} className="l-content content">
+              <div className="l-form__row">
+                <label>Title</label>
+                <input value={input_title || null} onChange={this.onInputChange('input_title')} name="title"></input>
+              </div>
+              <div className="l-form__row">
+                <label>Content</label>
+                <textarea value={input_content || null} onChange={this.onInputChange('input_content')} name="content"></textarea>
+              </div>
+              <button className="btn btn-secondary button button--orange">Update Post</button>
+          </form>
+          </div>
+        </div>
       </div>
     )
   }

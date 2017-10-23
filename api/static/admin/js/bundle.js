@@ -2368,7 +2368,6 @@ function request(method, url, body, callback) {
 }
 
 function getOnePost(post_id, callback) {
-  console.log('I am here 1!');
   request('GET', 'http://localhost:5000/posts/' + post_id, null, callback);
 }
 
@@ -2817,6 +2816,8 @@ var EditPost = function (_React$Component8) {
       post: {}
     };
     _this11.getPost = _this11.getPost.bind(_this11);
+    _this11.onInputChange = _this11.onInputChange.bind(_this11);
+    _this11.onSubmit = _this11.onSubmit.bind(_this11);
     return _this11;
   }
 
@@ -2832,33 +2833,87 @@ var EditPost = function (_React$Component8) {
 
       getOnePost(id, function (response) {
         _this12.setState({
-          post: response
+          post: response,
+          input_title: response.title,
+          input_content: response.content,
+          input_updated: response.updated
+
         });
-        console.log('finished the request!: ', _this12.state);
       });
+    }
+  }, {
+    key: 'onInputChange',
+    value: function onInputChange(input_field_name) {
+      var _this13 = this;
+
+      return function (e) {
+        console.log('e.target.value: ', e.target.value);
+        _this13.setState(_defineProperty({}, input_field_name, e.target.value));
+      };
+    }
+  }, {
+    key: 'onSubmit',
+    value: function onSubmit(post_id) {
+      var _this14 = this;
+
+      return function () {
+        console.log('On submit clicked!');
+        request('PUT', '/posts/' + post_id, {
+          'title': _this14.state.input_title,
+          'content': _this14.state.input_content
+        }), function () {
+          _this14.props.history.push('/admin');
+        };
+      };
     }
   }, {
     key: 'render',
     value: function render() {
-      var post = this.state.post;
+      var _state4 = this.state,
+          post = _state4.post,
+          input_title = _state4.input_title,
+          input_content = _state4.input_content,
+          input_updated = _state4.input_updated;
 
       return _react2.default.createElement(
         'div',
-        null,
+        { className: 'container' },
         _react2.default.createElement(
           'div',
-          null,
-          post.title || null
-        ),
-        _react2.default.createElement(
-          'div',
-          null,
-          post.content || null
-        ),
-        _react2.default.createElement(
-          'div',
-          null,
-          post.updated || null
+          { className: 'row' },
+          _react2.default.createElement(
+            'div',
+            { className: 'col-lg-12' },
+            _react2.default.createElement(
+              'form',
+              { onSubmit: this.onSubmit(this.props.match.params.postId), className: 'l-content content' },
+              _react2.default.createElement(
+                'div',
+                { className: 'l-form__row' },
+                _react2.default.createElement(
+                  'label',
+                  null,
+                  'Title'
+                ),
+                _react2.default.createElement('input', { value: input_title || null, onChange: this.onInputChange('input_title'), name: 'title' })
+              ),
+              _react2.default.createElement(
+                'div',
+                { className: 'l-form__row' },
+                _react2.default.createElement(
+                  'label',
+                  null,
+                  'Content'
+                ),
+                _react2.default.createElement('textarea', { value: input_content || null, onChange: this.onInputChange('input_content'), name: 'content' })
+              ),
+              _react2.default.createElement(
+                'button',
+                { className: 'btn btn-secondary button button--orange' },
+                'Update Post'
+              )
+            )
+          )
         )
       );
     }

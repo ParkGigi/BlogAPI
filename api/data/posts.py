@@ -4,7 +4,6 @@ def get():
     posts = []
     cursor = db.cursor()
     cursor.execute("SELECT * FROM Posts;")
-    #print(cursor.fetchall())
     for post_id, author_id, title, content, deleted, created, updated in cursor.fetchall():
         posts.append({
             "id": post_id,
@@ -19,7 +18,6 @@ def get():
     return posts
 
 def get_one_post(post_id):
-    print('This is post_id: ', post_id)
     cursor = db.cursor()
     cursor.execute("SELECT * FROM Posts WHERE id=%s;", (post_id,))
     post_id, author_id, title, content, deleted, created, updated = cursor.fetchone()
