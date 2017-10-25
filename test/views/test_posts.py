@@ -18,12 +18,14 @@ class APIBaseCase(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        cursor = api.db.cursor()
+        cursor.execute("""DELETE FROM Users WHERE username = 'jyp';""")
+        cursor.close()
         # TODO: before adding new test files (test_users.py) you should
         # implement deleting the test user above ^^ so that all other
         # files start from a clean state. Alternatively, you could
         # do something like delete all things from all tables here. Truncate?
-        pass
-
+        
     def test_posts_GET(self):
         response = self.app.get('/posts')
         self.assertEqual(response.status_code, 200)
