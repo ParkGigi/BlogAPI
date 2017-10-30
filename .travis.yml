@@ -3,7 +3,9 @@ python:
   - "3.5"
 install:
   - pip install .
-# command to run tests
+  - pip install coveralls
+after_success:
+  - coveralls
 script:
   - pylint api
-  - python3 -m unittest
+  - coverage run -m unittest
