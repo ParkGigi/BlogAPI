@@ -6,12 +6,14 @@ def get():
     users = []
     cursor = db.cursor()
     cursor.execute("SELECT * FROM Users;")
-    for user_id, username, password, nickname, picture, user_level, delete, created, updated  in cursor.fetchall():
+    for (user_id, username, password, nickname, picture, user_level, delete,
+         created, updated) in cursor.fetchall():
         users.append(
             {
                 "id": user_id,
                 "username": username,
                 "password": password,
+                "nickname": nickname,
                 "picture": picture,
                 "user_level": user_level,
                 "delete": delete,
@@ -22,11 +24,33 @@ def get():
         cursor.close()
     return users
 
+def create(account_dictionary):
+    cursor = db.cursor()
+    cursor.execute("INSERT INTO Users (username, password) VALUES (%s, %s);",
+                   (account_dictionary['username'], account_dictionary['password']))
+    last_id = cursor.lastrowid
+    db.commit()
+    cursor.execute("SELECT * FROM Users WHERE id=%s", (last_id,))
+    account_info = cursor.fetchone()
+    cursor.close()
+    account = {
+        "id" : account_info[0],
+        "username" : account_info[1],
+        "password" : account_info[2],
+        "nickname" : account_info[3],
+        "picture" : account_info[4],
+        "user_level" : account_info[5],
+        "deleted" : account_info[6],
+        "created" : account_info[7],
+        "updated" : account_info[8]
+    }
+    return account
+
 
 def get_one_user(username):
     user_information = {}
     cursor = db.cursor()
-    cursor.execute("SELECT * FROM Users WHERE username=%s;", (username, password))
+    cursor.execute("SELECT * FROM Users WHERE username=%s;", (username,))
     result = cursor.fetchone()
     user_information = {
         "id": result[0],

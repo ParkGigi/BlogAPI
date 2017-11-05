@@ -1,1 +1,1 @@
-# TODO write code for /users endpoints
+# TODO write code for /users endpoint
