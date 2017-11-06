@@ -36,7 +36,7 @@ def create(account_dictionary):
     account = {
         "id" : account_info[0],
         "username" : account_info[1],
-        "password" : account_info[2],
+        "password" : bcrypt.hashpw(account_info[2], bcrypt.gensalt()),
         "nickname" : account_info[3],
         "picture" : account_info[4],
         "user_level" : account_info[5],
@@ -68,7 +68,7 @@ def get_one_user(username):
 
 def get_user_id(username):
     cursor = db.cursor()
-    cursor.execute("SELECT id FROM USERS WHERE username=%s;", (username,))
+    cursor.execute("SELECT id FROM Users WHERE username=%s;", (username,))
     user_id = cursor.fetchone()[0]
     cursor.close()
     return user_id

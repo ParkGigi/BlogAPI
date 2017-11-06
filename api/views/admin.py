@@ -6,21 +6,21 @@ from api.views import utility
 
 
 @api.route('/admin/')
-def show_admin():
+def admin():
     _, returned_redirect = utility.require_session()
     if returned_redirect:
         return returned_redirect
     return render_template('admin.html')
 
 @api.route('/admin/login')
-def display_example():
+def login_GET():
     if utility.get_session():
         return redirect('/admin')
     return render_template('index.html')
 
 
 @api.route('/admin/login', methods=['POST'])
-def receive_credentials():
+def login_POST():
     username = request.get_json().get('username')
     password = request.get_json().get('password')
 
@@ -35,6 +35,7 @@ def receive_credentials():
     if errors:
         return utility.jsonify({'errors': errors})
 
+    print(username, password)
     if not users.validate(username, password):
         return utility.jsonify({
             'errors': [
@@ -44,3 +45,7 @@ def receive_credentials():
 
     session_id = sessions.create(username)
     return utility.set_session(utility.jsonify({'errors': []}), session_id)
+
+@api.route('/admin/logout')
+def logout():
+    return utility.set_session(redirect('/admin'), None)

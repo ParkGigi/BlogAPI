@@ -7,5 +7,5 @@ install:
 after_success:
   - coveralls
 script:
-  - pylint api
+  - pylint api test
   - coverage run -m unittest
