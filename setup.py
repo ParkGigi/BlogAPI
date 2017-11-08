@@ -2,4 +2,4 @@
 
 from distutils.core import setup
 
-setup(install_requires=['pymysql', 'flask', 'bcrypt'])
+setup(install_requires=['pymysql', 'flask', 'bcrypt', 'pylint', 'coverage'])

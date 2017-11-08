@@ -1,17 +1,18 @@
+import json
+import datetime
+
 from flask import make_response, request, redirect
 
 from api.data import sessions
-import datetime
-import json
 
 def jsonify(obj):
-    def jsonify_dict(d):
-        for key, val in d.items():
+    def jsonify_dict(dictionary):
+        for key, val in dictionary.items():
             if isinstance(val, bytes):
-                d[key] = val.decode()
+                dictionary[key] = val.decode()
             elif isinstance(val, datetime.datetime):
-                d[key] = val.isoformat()
-        return d
+                dictionary[key] = val.isoformat()
+        return dictionary
 
     if isinstance(obj, dict):
         obj = jsonify_dict(obj)
@@ -27,7 +28,7 @@ def get_session():
 
     session = sessions.get(session_id)
 
-    if (not session or session['expired']):
+    if not session or session['expired']:
         return False
 
     return session

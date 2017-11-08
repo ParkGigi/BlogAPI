@@ -1,7 +1,7 @@
-from flask import request, redirect
+from flask import request
 
 from api import api
-from api.data import users, posts, comments
+from api.data import posts, comments
 from api.views.utility import jsonify, require_session
 
 
@@ -11,10 +11,10 @@ def posts_handler():
 
 @api.route('/posts', methods=['POST'])
 def posts_create_handler():
-    session, redirect = require_session()
-    
+    _, redirect = require_session()
+    if redirect:
+        return redirect
     data = request.get_json()
-    
     post = posts.create(data)
     return jsonify(post)
 
@@ -25,26 +25,29 @@ def posts_get_one(post_id):
 
 @api.route('/posts/<post_id>', methods=['PUT'])
 def posts_update_handler(post_id):
-    session, redirect = require_session()
-    #session, redirect = utility.require_session()
-    #if redirect:
-    #    return redirectbw
+    _, redirect = require_session()
+    if redirect:
+        return redirect
     data = request.get_json()
     posts.update(post_id, data.title, data.content)
     return
 
 @api.route('/posts/<post_id>', methods=['DELETE'])
 def posts_delete_handler(post_id):
-    session, redirect = require_session()
+    _, redirect = require_session()
+    if redirect:
+        return redirect
     if posts.get_one_post(post_id):
-        response_message = posts.delete(post_id)
-        return jsonify({ "errors": [] })
-    return jsonify({ "errors": ["Post does not exist."] })
+        posts.delete(post_id)
+        return jsonify({"errors": []})
+    return jsonify({"errors": ["Post does not exist."]})
 
 
 @api.route('/posts/<post_id>/comments', methods=['POST'])
 def write_comment_handler(post_id):
-    session, redirect = require_session()
+    _, redirect = require_session()
+    if redirect:
+        return redirect
     content = request.get_json()
     result = comments.create(post_id, 1, content)
     return jsonify(result)
@@ -57,10 +60,11 @@ def get_comment_handler(post_id):
 
 
 @api.route('/posts/<post_id>/comments/<comment_id>', methods=['DELETE'])
-def delete_comment_handler(post_id, comment_id):
-    # TODO: handle post_id too!
-    session, redirect = require_session()
+def delete_comment_handler(post_id, comment_id): # pylint: disable=unused-argument
+    _, redirect = require_session()
+    if redirect:
+        return redirect
     if comments.get_one(comment_id):
-        response_message = posts.delete_comment(comment_id)
-        return jsonify({ "errors": [] })
+        comments.delete(comment_id)
+        return #jsonify({ "errors": response_message })
     return jsonify({"errors":["Comment does not exist."]})

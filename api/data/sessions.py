@@ -27,13 +27,13 @@ def get(session_id):
             'expired': result[2],
         }
 
-        #if expired = False, check if the 'expires' time has passed the current time, and if that's the case, change to expired = True
+        #if expired = False, check if the 'expires' time has passed the current time,
+        #and if that's the case, change to expired = True
         if not session_information['expired']:
             current_datetime = datetime.datetime.now()
             if current_datetime > session_information['expires']:
                 session_information['expired'] = True
-            
-    #There's no information about this session in the database. 
+    #There's no information about this session in the database.
     else:
-        session_information = null
+        session_information = None
     return session_information

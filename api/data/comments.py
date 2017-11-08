@@ -2,7 +2,8 @@ from api import db
 
 def create(post_id, commentor_id, content):
     cursor = db.cursor()
-    cursor.execute("INSERT INTO Comment (post_id, commentor_id, content) VALUES (%s, %s, %s)", (post_id, commentor_id, content['content']))
+    cursor.execute("INSERT INTO Comment (post_id, commentor_id, content) VALUES (%s, %s, %s)",
+                   (post_id, commentor_id, content['content']))
     last_id = cursor.lastrowid
     db.commit()
     cursor.execute("SELECT * FROM Comment WHERE id=%s", (last_id,))
@@ -18,9 +19,9 @@ def create(post_id, commentor_id, content):
     }
     return comment
 
-def get(post_id):
+def get(id_post):
     cursor = db.cursor()
-    cursor.execute("SELECT * FROM Comment WHERE post_id=%s", (post_id,))
+    cursor.execute("SELECT * FROM Comment WHERE post_id=%s", (id_post,))
     all_comments = []
     for comment_id, post_id, commentor_id, content, created, updated  in cursor.fetchall():
         all_comments.append({
@@ -46,4 +47,3 @@ def delete(comment_id):
     db.commit()
     cursor.close()
     return
-

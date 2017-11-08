@@ -10,27 +10,30 @@ def is_testing():
     return 'unittest' in sys.argv[0]
 
 def init_config():
-    config = configparser.RawConfigParser()
+    configuration = configparser.RawConfigParser()
 
     if is_testing():
-        config.read('test.cfg')
+        configuration.read('test.cfg')
     else:
-        config.read('dev.cfg')
-    return config
+        configuration.read('dev.cfg')
+    return configuration
 
-config = init_config()
+CONFIG = init_config()
 
-api = Flask(__name__)
+api = Flask(__name__) # pylint: disable=invalid-name
 api.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 
 def init_db():
-    host = config.get('db', 'host')
-    user = config.get('db', 'user')
-    db = config.get('db', 'name')
+    host = CONFIG.get('db', 'host')
+    user = CONFIG.get('db', 'user')
+    db_name = CONFIG.get('db', 'name')
 
     if is_testing():
-        r = call(["mysql", "-u", user, '-e', 'drop database if exists {}; create database {}; use {}; source schema.sql;'.format(db, db, db)])
+        call(["mysql", "-u", user, '-e',
+              """drop database if exists {};
+              create database {};
+              use {};
+              source schema.sql;""".format(db_name, db_name, db_name)])
+    return pymysql.connect(host=host, user=user, db=db_name)
 
-    return pymysql.connect(host=host, user=user, db=db)
-
-db = init_db()
+db = init_db() #pylint: disable=invalid-name
