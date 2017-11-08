@@ -13,14 +13,14 @@ def admin():
     return render_template('admin.html')
 
 @api.route('/admin/login')
-def login_GET():
+def login_get():
     if utility.get_session():
         return redirect('/admin')
     return render_template('index.html')
 
 
 @api.route('/admin/login', methods=['POST'])
-def login_POST():
+def login_post():
     username = request.get_json().get('username')
     password = request.get_json().get('password')
 
