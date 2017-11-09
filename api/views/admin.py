@@ -16,7 +16,7 @@ def admin():
 def login_get():
     if utility.get_session():
         return redirect('/admin')
-    return render_template('index.html')
+    return render_template('admin.html')
 
 
 @api.route('/admin/login', methods=['POST'])

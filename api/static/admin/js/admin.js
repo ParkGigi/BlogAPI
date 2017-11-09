@@ -77,6 +77,60 @@ class TableCell extends React.Component {
   }
 }
 
+class Login extends React.Component {
+  constructor() {
+    super();
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onChange = this.onInputChange.bind(this);
+    this.state = {};
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    console.log('I am here!!!');
+    request('POST', 'http://localhost:5000/admin/login', {
+      username: this.state.username,
+      password: this.state.password,
+    }, () => {
+      this.props.history.push('/admin');
+    })
+  }
+
+  onInputChange(input_field_name) {
+    return(e) => {
+      this.setState({
+        [input_field_name]: e.target.value,
+      })
+    }
+  }
+  
+  render() {
+    return (
+      <div>
+        <form onSubmit={this.onSubmit}>
+          <div>Welcome to BlogAPI!</div>
+          <div className="l-form__row">
+            <label>Email</label>
+            <input
+              name="email"
+              type="email"
+              onChange={this.onInputChange('username')}  
+            />
+          </div>
+          <div className="l-form__row">
+          <label>Password</label>
+          <input
+            type="password"
+            onChange={this.onInputChange('password')}
+          />
+          </div>
+          <button className="btn btn-secondary button button--orange">Login to BlogAPI</button>
+        </form>
+      </div>
+    )
+  }
+}
+
 class Posts extends React.Component {
   render() {
     const { posts, getOnePost } = this.props;
@@ -155,6 +209,7 @@ class Admin extends React.Component {
   }
 
   getPosts() {
+    console.log('I am in get posts')
     request('GET', 'http://localhost:5000/posts', null, (response) => {
       this.setState({ posts: response });
           
@@ -162,6 +217,7 @@ class Admin extends React.Component {
   }
 
   getUsers() {
+    console.log('I am in getUsers')
     request('GET', 'http://localhost:5000/users', null, (response) => {
       this.setState({ users: response });
     });
@@ -280,7 +336,6 @@ class EditPost extends React.Component {
 
   onInputChange(input_field_name) {
     return(e) => {
-      console.log('e.target.value: ', e.target.value);
       this.setState({
         [input_field_name]: e.target.value, 
       })
@@ -334,7 +389,7 @@ function App() {
           <div className="container">
             <div className="row">
               <div className="col-lg-12">
-                BlogAPI
+                BLOGAPI
                 <div className="header__item">Home</div>
                 <div className="header__item">About</div>
                 <div className="header__item">Articles</div>
@@ -343,6 +398,7 @@ function App() {
           </div>
         </div>
         <Switch>
+          <Route exact path="/admin/login" component={Login} />
           <Route exact path="/admin" component={Admin} />
           <Route path="/admin/addPost" component={AddPost} />
           <Route path="/admin/post/:postId/edit" component={EditPost} />

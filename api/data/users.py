@@ -84,4 +84,5 @@ def validate(username, password):
     else:
         return False
 
+    #print('result of bcrypt',bcrypt.checkpw(password.encode(), fetched_password))
     return bcrypt.checkpw(password.encode(), fetched_password)

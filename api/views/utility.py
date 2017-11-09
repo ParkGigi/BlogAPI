@@ -46,4 +46,4 @@ def require_session():
     session = get_session()
     if session:
         return session, None
-    return None, redirect('/login')
+    return None, redirect('/admin/login')

@@ -2473,8 +2473,99 @@ var TableCell = function (_React$Component3) {
   return TableCell;
 }(_react2.default.Component);
 
-var Posts = function (_React$Component4) {
-  _inherits(Posts, _React$Component4);
+var Login = function (_React$Component4) {
+  _inherits(Login, _React$Component4);
+
+  function Login() {
+    _classCallCheck(this, Login);
+
+    var _this4 = _possibleConstructorReturn(this, (Login.__proto__ || Object.getPrototypeOf(Login)).call(this));
+
+    _this4.onSubmit = _this4.onSubmit.bind(_this4);
+    _this4.onChange = _this4.onInputChange.bind(_this4);
+    _this4.state = {};
+    return _this4;
+  }
+
+  _createClass(Login, [{
+    key: 'onSubmit',
+    value: function onSubmit(e) {
+      var _this5 = this;
+
+      e.preventDefault();
+      console.log('I am here!!!');
+      request('POST', 'http://localhost:5000/admin/login', {
+        username: this.state.username,
+        password: this.state.password
+      }, function () {
+        _this5.props.history.push('/admin');
+      });
+    }
+  }, {
+    key: 'onInputChange',
+    value: function onInputChange(input_field_name) {
+      var _this6 = this;
+
+      return function (e) {
+        _this6.setState(_defineProperty({}, input_field_name, e.target.value));
+      };
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'form',
+          { onSubmit: this.onSubmit },
+          _react2.default.createElement(
+            'div',
+            null,
+            'Welcome to BlogAPI!'
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'l-form__row' },
+            _react2.default.createElement(
+              'label',
+              null,
+              'Email'
+            ),
+            _react2.default.createElement('input', {
+              name: 'email',
+              type: 'email',
+              onChange: this.onInputChange('username')
+            })
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'l-form__row' },
+            _react2.default.createElement(
+              'label',
+              null,
+              'Password'
+            ),
+            _react2.default.createElement('input', {
+              type: 'password',
+              onChange: this.onInputChange('password')
+            })
+          ),
+          _react2.default.createElement(
+            'button',
+            { className: 'btn btn-secondary button button--orange' },
+            'Login to BlogAPI'
+          )
+        )
+      );
+    }
+  }]);
+
+  return Login;
+}(_react2.default.Component);
+
+var Posts = function (_React$Component5) {
+  _inherits(Posts, _React$Component5);
 
   function Posts() {
     _classCallCheck(this, Posts);
@@ -2543,8 +2634,8 @@ var Posts = function (_React$Component4) {
   return Posts;
 }(_react2.default.Component);
 
-var Users = function (_React$Component5) {
-  _inherits(Users, _React$Component5);
+var Users = function (_React$Component6) {
+  _inherits(Users, _React$Component6);
 
   function Users() {
     _classCallCheck(this, Users);
@@ -2607,18 +2698,18 @@ var Users = function (_React$Component5) {
   return Users;
 }(_react2.default.Component);
 
-var Admin = function (_React$Component6) {
-  _inherits(Admin, _React$Component6);
+var Admin = function (_React$Component7) {
+  _inherits(Admin, _React$Component7);
 
   function Admin() {
     _classCallCheck(this, Admin);
 
-    var _this6 = _possibleConstructorReturn(this, (Admin.__proto__ || Object.getPrototypeOf(Admin)).call(this));
+    var _this9 = _possibleConstructorReturn(this, (Admin.__proto__ || Object.getPrototypeOf(Admin)).call(this));
 
-    _this6.state = {
+    _this9.state = {
       posts: null
     };
-    return _this6;
+    return _this9;
   }
 
   _createClass(Admin, [{
@@ -2630,19 +2721,21 @@ var Admin = function (_React$Component6) {
   }, {
     key: 'getPosts',
     value: function getPosts() {
-      var _this7 = this;
+      var _this10 = this;
 
+      console.log('I am in get posts');
       request('GET', 'http://localhost:5000/posts', null, function (response) {
-        _this7.setState({ posts: response });
+        _this10.setState({ posts: response });
       });
     }
   }, {
     key: 'getUsers',
     value: function getUsers() {
-      var _this8 = this;
+      var _this11 = this;
 
+      console.log('I am in getUsers');
       request('GET', 'http://localhost:5000/users', null, function (response) {
-        _this8.setState({ users: response });
+        _this11.setState({ users: response });
       });
     }
   }, {
@@ -2698,28 +2791,28 @@ var Admin = function (_React$Component6) {
 
 ;
 
-var AddPost = function (_React$Component7) {
-  _inherits(AddPost, _React$Component7);
+var AddPost = function (_React$Component8) {
+  _inherits(AddPost, _React$Component8);
 
   function AddPost(props) {
     _classCallCheck(this, AddPost);
 
-    var _this9 = _possibleConstructorReturn(this, (AddPost.__proto__ || Object.getPrototypeOf(AddPost)).call(this, props));
+    var _this12 = _possibleConstructorReturn(this, (AddPost.__proto__ || Object.getPrototypeOf(AddPost)).call(this, props));
 
-    _this9.state = {
+    _this12.state = {
       title: null,
       content: null
     };
 
-    _this9.onSubmit = _this9.onSubmit.bind(_this9);
-    _this9.onChange = onChange.bind(_this9);
-    return _this9;
+    _this12.onSubmit = _this12.onSubmit.bind(_this12);
+    _this12.onChange = onChange.bind(_this12);
+    return _this12;
   }
 
   _createClass(AddPost, [{
     key: 'onSubmit',
     value: function onSubmit(e) {
-      var _this10 = this;
+      var _this13 = this;
 
       e.preventDefault();
       var _state2 = this.state,
@@ -2730,7 +2823,7 @@ var AddPost = function (_React$Component7) {
         title: title,
         content: content
       }, function () {
-        _this10.props.history.push('/admin');
+        _this13.props.history.push('/admin');
       });
     }
   }, {
@@ -2804,21 +2897,21 @@ var AddPost = function (_React$Component7) {
   return AddPost;
 }(_react2.default.Component);
 
-var EditPost = function (_React$Component8) {
-  _inherits(EditPost, _React$Component8);
+var EditPost = function (_React$Component9) {
+  _inherits(EditPost, _React$Component9);
 
   function EditPost() {
     _classCallCheck(this, EditPost);
 
-    var _this11 = _possibleConstructorReturn(this, (EditPost.__proto__ || Object.getPrototypeOf(EditPost)).call(this));
+    var _this14 = _possibleConstructorReturn(this, (EditPost.__proto__ || Object.getPrototypeOf(EditPost)).call(this));
 
-    _this11.state = {
+    _this14.state = {
       post: {}
     };
-    _this11.getPost = _this11.getPost.bind(_this11);
-    _this11.onInputChange = _this11.onInputChange.bind(_this11);
-    _this11.onSubmit = _this11.onSubmit.bind(_this11);
-    return _this11;
+    _this14.getPost = _this14.getPost.bind(_this14);
+    _this14.onInputChange = _this14.onInputChange.bind(_this14);
+    _this14.onSubmit = _this14.onSubmit.bind(_this14);
+    return _this14;
   }
 
   _createClass(EditPost, [{
@@ -2829,10 +2922,10 @@ var EditPost = function (_React$Component8) {
   }, {
     key: 'getPost',
     value: function getPost(id) {
-      var _this12 = this;
+      var _this15 = this;
 
       getOnePost(id, function (response) {
-        _this12.setState({
+        _this15.setState({
           post: response,
           input_title: response.title,
           input_content: response.content,
@@ -2844,25 +2937,24 @@ var EditPost = function (_React$Component8) {
   }, {
     key: 'onInputChange',
     value: function onInputChange(input_field_name) {
-      var _this13 = this;
+      var _this16 = this;
 
       return function (e) {
-        console.log('e.target.value: ', e.target.value);
-        _this13.setState(_defineProperty({}, input_field_name, e.target.value));
+        _this16.setState(_defineProperty({}, input_field_name, e.target.value));
       };
     }
   }, {
     key: 'onSubmit',
     value: function onSubmit(post_id) {
-      var _this14 = this;
+      var _this17 = this;
 
       return function () {
         console.log('On submit clicked!');
         request('PUT', '/posts/' + post_id, {
-          'title': _this14.state.input_title,
-          'content': _this14.state.input_content
+          'title': _this17.state.input_title,
+          'content': _this17.state.input_content
         }), function () {
-          _this14.props.history.push('/admin');
+          _this17.props.history.push('/admin');
         };
       };
     }
@@ -2941,7 +3033,7 @@ function App() {
             _react2.default.createElement(
               'div',
               { className: 'col-lg-12' },
-              'BlogAPI',
+              'BLOGAPI',
               _react2.default.createElement(
                 'div',
                 { className: 'header__item' },
@@ -2964,6 +3056,7 @@ function App() {
       _react2.default.createElement(
         _reactRouterDom.Switch,
         null,
+        _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/admin/login', component: Login }),
         _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/admin', component: Admin }),
         _react2.default.createElement(_reactRouterDom.Route, { path: '/admin/addPost', component: AddPost }),
         _react2.default.createElement(_reactRouterDom.Route, { path: '/admin/post/:postId/edit', component: EditPost })
