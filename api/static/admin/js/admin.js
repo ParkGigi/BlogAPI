@@ -2,7 +2,7 @@ import createBrowserHistory from 'history/createBrowserHistory';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider, connect } from 'react-redux';
-import { Router, Link } from 'react-router';
+import { Router } from 'react-router';
 import * as ReactRouterDOM from 'react-router-dom';
 import { syncHistoryWithStore, routerReducer, push } from 'react-router-redux'
 
@@ -22,7 +22,7 @@ class Route_ extends React.Component {
         const parsed_cookie = cookie.split("=");
         // TODO: find exact cookie, there can be many
         if (parsed_cookie[1] !== "None") {
-          this.props.dispatch('LOGOUT');
+          this.props.dispatch('LOGIN');
           this.props.dispatch(push('/admin'));
         }
       }
@@ -112,7 +112,7 @@ class TableCell extends React.Component {
   }
 }
 
-class Login extends React.Component {
+class Login_ extends React.Component {
   constructor() {
     super();
 
@@ -128,9 +128,9 @@ class Login extends React.Component {
       password: this.state.password,
     }, (response) => {
       if (response['errors'].length > 0) {
-        history.push('/admin/login');
+        this.props.dispatch(push('/admin/login'));
       } else {
-        history.push('/admin');
+        this.props.dispatch(push('/admin'));
       }
     })
   }
@@ -165,6 +165,8 @@ class Login extends React.Component {
     )
   }
 }
+
+const Login = connect(Login_)
 
 class Posts extends React.Component {
   render() {
@@ -282,7 +284,7 @@ class Admin extends React.Component {
   }
 };
 
-class AddPost extends React.Component {
+class AddPost_ extends React.Component {
   constructor(props) {
     super(props);
 
@@ -302,7 +304,7 @@ class AddPost extends React.Component {
       title: title,
       content: content,
     }, () => {
-      history.push('/admin');
+      this.props.dispatch(push('/admin'));
     });
   }
   
@@ -342,7 +344,9 @@ class AddPost extends React.Component {
   }
 }
 
-class EditPost extends React.Component {
+const AddPost = connect(AddPost_);
+
+class EditPost_ extends React.Component {
   constructor() {
     super();
 
@@ -364,7 +368,7 @@ class EditPost extends React.Component {
         'title': this.state.input_title,
         'content': this.state.input_content,
       }, () => {
-        history.push('/admin');
+        this.props.dispatch(push('/admin'));
       });
     };
   }
@@ -393,6 +397,8 @@ class EditPost extends React.Component {
   }
 }
 
+const EditPost = connnect(EditPost_);
+
 class App_ extends React.Component {
   render() {
     return (
@@ -406,7 +412,7 @@ class App_ extends React.Component {
                 <div className="header__item">About</div>
                 <div className="header__item">Articles</div>
                 {!this.props.authentication.loggedIn ? null : (
-                   <Link className="header__logout" to="/admin/logout">Logout</Link> 
+                   <a className="header__logout" href="/admin/logout">Logout</a> 
                 )}
               </div>
             </div>
