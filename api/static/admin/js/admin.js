@@ -1,26 +1,29 @@
+import createBrowserHistory from 'history/createBrowserHistory';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router } from 'react-router';
-import createBrowserHistory from 'history/createBrowserHistory';
+import { Provider, connect } from 'react-redux';
+import { Router, Link } from 'react-router';
 import * as ReactRouterDOM from 'react-router-dom';
+import { syncHistoryWithStore, routerReducer, push } from 'react-router-redux'
+
+import store from './store';
 
 const { Link } = ReactRouterDOM;
-const history = createBrowserHistory();
 
-const GLOBAL_STATE = { loggedIn: false };
+const history = syncHistoryWithStore(createBrowserHistory(), store)
 
-class Route extends React.Component {
+class Route_ extends React.Component {
   componentWillMount() {
-    if (!GLOBAL_STATE.loggedIn) {
+    if (!this.props.authentication.loggedIn) {
       if (window.location.pathname !== '/admin/login') {
-        history.push('/admin/login');
+        this.props.dispatch(push('/admin/login'));
       } else {
         const cookie = document.cookie;
         const parsed_cookie = cookie.split("=");
         // TODO: find exact cookie, there can be many
         if (parsed_cookie[1] !== "None") {
-          GLOBAL_STATE.loggedIn = false;
-          history.push('/admin');
+          this.props.dispatch('LOGOUT');
+          this.props.dispatch(push('/admin'));
         }
       }
     }
@@ -30,6 +33,8 @@ class Route extends React.Component {
     return <ReactRouterDOM.Route {...this.props} />;
   }
 }
+
+const Route = connect(Route_, ({ authentication }) => ({ authentication }));
 
 function onChange({ target: { name, value } }) {
   this.setState({ [name]: value });
@@ -388,7 +393,7 @@ class EditPost extends React.Component {
   }
 }
 
-class App extends React.Component {
+class App_ extends React.Component {
   render() {
     return (
       <div>
@@ -400,8 +405,8 @@ class App extends React.Component {
                 <div className="header__item">Home</div>
                 <div className="header__item">About</div>
                 <div className="header__item">Articles</div>
-                {!GLOBAL_STATE.loggedIn ? null : (
-                   <a className="header__logout" href="/admin/logout">Logout</a> 
+                {!this.props.authentication.loggedIn ? null : (
+                   <Link className="header__logout" to="/admin/logout">Logout</Link> 
                 )}
               </div>
             </div>
@@ -416,9 +421,13 @@ class App extends React.Component {
   }
 }
 
+const App = connect(App_, ({ authentication }) => ({ authentication }));
+
 ReactDOM.render(
-  <Router history={history}>
-    <App/>
-  </Router>,
+  <Provider store={store}>
+    <Router history={history}>
+      <App/>
+    </Router>
+  </Provider>,
   document.getElementById('root')
 );
