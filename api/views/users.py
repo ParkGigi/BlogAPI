@@ -10,19 +10,6 @@ def sign_up():
     create_account = users.create(data)
     return jsonify(create_account)
 
-@api.route('/admin/login', methods=['POST'])
-def log_in_post():
-    data = request.get_json()
-    print('In the view function!!!!!!')
-    result = users.validate(data['username'], data['password'])
-    print('This is result!!!!', result)
-    if result:
-        print('password passed!!!!!!!')
-        return
-    else:
-        print('here!!!!!!!!!!')
-        return redirect('/admin/login')
-
 @api.route('/users', methods=['GET'])
 def users_get():
     result = users.get()
