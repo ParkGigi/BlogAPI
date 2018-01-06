@@ -1,0 +1,51 @@
+@import '../scss/constants';
+
+.Header {
+    background: $white;
+    font-size: 1.2em;
+    border-bottom: 1px solid $border-gray;
+    align-items: center;
+    color: $font-color-medium;
+    padding: 15px 0;
+    
+    &__link {
+	color: $font-color-medium;
+	margin-right: 1em;
+	
+    }
+
+    &__user {
+	justify-content: flex-end;
+	align-items: center;
+    }
+
+    &__blogName {
+	margin-right: 1.5em;
+	.icon {
+	    color: $green-primary;
+	    margin-left: 0.5em;
+	}
+    }
+
+    &__createPost {
+	color: $green-primary;
+	border: 1px solid $green-primary;
+	padding: 8px 20px;
+	border-radius: 20px;
+	margin-right: 1.5em;
+
+[	&:hover {
+	    background-color: $green-primary;
+	    color: $white;
+	    text-decoration: none;
+	}
+    }
+
+    &__profilePicture {
+	width: 45px;
+	height: 45px;
+	background-size: 65px;
+	border-radius: 40px;
+	background-position: center center;
+    }
+}
