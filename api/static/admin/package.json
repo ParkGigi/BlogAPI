@@ -37,6 +37,7 @@
     "promise": "8.0.1",
     "raf": "3.4.0",
     "react": "^16.2.0",
+    "react-css-grid-table": "git+ssh://git@github.com/rebeccapark/react-css-grid-table",
     "react-dev-utils": "^4.2.1",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",

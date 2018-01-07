@@ -1,7 +1,5 @@
 import React from 'react';
-
-import { IconColumn } from '../components/Columns';
-import Table from '../components/Table';
+import Table, { IconColumn } from 'react-css-grid-table';
 
 export default function(props) {
   const headers = [

@@ -5344,6 +5344,12 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+"react-css-grid-table@git+ssh://git@github.com/rebeccapark/react-css-grid-table":
+  version "0.0.2"
+  resolved "git+ssh://git@github.com/rebeccapark/react-css-grid-table#fc863045d39515036aa2d1ee2adc065ad52bf07f"
+  dependencies:
+    react "^16.2.0"
+
 react-dev-utils@^4.2.1:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-4.2.1.tgz#9f2763e7bafa1a1b9c52254d2a479deec280f111"

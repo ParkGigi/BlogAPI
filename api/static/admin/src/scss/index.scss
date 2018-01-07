@@ -30,38 +30,6 @@ a:hover, a:focus {
     color: $green-primary;
 }
 
-.Table {
-    margin-top: 1.5em;
-    border: 1px solid #dfdfdf;
-    vertical-align: center;
-    display: grid;
-        
-    &__cell {
-	display: flex;
-	align-items: center;
-	padding: 10px 0;
-	border-bottom: 1px solid #dfdfdf;
-    }
-    
-    &__header {
-	background-color: #efefef;
-	padding: 10px 0;
-    }
-
-    .ion-md-checkmark {
-	font-size: 1.2em;
-	color: #d2cfcf;
-	&:hover {
-	    color: $green-primary;
-	}
-    }
-
-    .icon__data {
-	padding-left: 0.5em;
-    }
-}
-
-
 .Posts .Table {
     .ion-ios-chatbubbles-outline {
 	font-size: 1.5em;
