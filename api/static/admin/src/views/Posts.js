@@ -44,13 +44,13 @@ export default function(props) {
 
   const customColumns = {
     check: {
-      body: (data) => <IconColumn icon="icon ion-md-checkmark" data={data} />,
+      format: (data) => <IconColumn icon="icon ion-md-checkmark" data={data} />,
       className: 'justify-content-center'
     },
     comments: {
       body: (data) => <IconColumn icon="icon ion-ios-chatbubbles-outline" data={data} />
     },
-    hearts: {
+    ghearts: {
       body: (data) => <IconColumn icon="icon ion-ios-heart-outline"  data={data} />
     }
   };

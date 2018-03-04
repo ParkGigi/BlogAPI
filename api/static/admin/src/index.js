@@ -1,4 +1,4 @@
-import createHistory from 'history/createBrowserHistory';
+wimport createHistory from 'history/createBrowserHistory';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';

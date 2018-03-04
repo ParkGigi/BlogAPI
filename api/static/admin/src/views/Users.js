@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+
 import Table, { IconColumn } from 'react-css-grid-table';
 
 export default function(props) {
@@ -47,7 +49,7 @@ export default function(props) {
       id: 2,
       user: 'Effie Eaton',
       numberPublished: 3,
-      email: 'mu@gmail.com',
+      email: 'effie@gmail.com',
       permissions: 'Writer',
       actions: ['Edit', 'More'],
     }
@@ -58,9 +60,13 @@ export default function(props) {
       format: (data) => <IconColumn icon="icon ion-md-checkmark" data={data} />,
       className: 'justify-content-center'
     },
+    user: {
+      format: (data) => <Link to="/users:id" data={data} />,
+      className: 'Table__user'
+    },
     actions: {
       format: (multipleData) => multipleData.map(
-	data => <span className="pr-2">{data}</span>)
+	data => <span className="Table__action pr-2">{data}</span>)
     }
   }
 
